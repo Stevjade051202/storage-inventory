@@ -4,6 +4,9 @@ export interface StorageItem {
   location: string;
   quantity: number;
   minStock: number;
+  uom: string;
+  unitCost: number;
+  unitPrice: number;
   category: string;
   lastUpdated: Date;
 }

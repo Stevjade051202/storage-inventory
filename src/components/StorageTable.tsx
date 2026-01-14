@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { StorageItem, getStockStatus } from '@/types/storage';
-import { StockStatusBadge } from './StockStatusBadge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Pencil, Check, X } from 'lucide-react';
@@ -49,11 +48,10 @@ export function StorageTable({ items, onUpdateQuantity }: StorageTableProps) {
         <thead>
           <tr className="bg-muted/50 border-b border-border">
             <th className="text-left px-4 py-3 text-sm font-semibold text-foreground">Item Name</th>
-            <th className="text-left px-4 py-3 text-sm font-semibold text-foreground">Location</th>
-            <th className="text-left px-4 py-3 text-sm font-semibold text-foreground">Category</th>
-            <th className="text-center px-4 py-3 text-sm font-semibold text-foreground">Quantity</th>
-            <th className="text-center px-4 py-3 text-sm font-semibold text-foreground">Min Stock</th>
-            <th className="text-center px-4 py-3 text-sm font-semibold text-foreground">Status</th>
+            <th className="text-right px-4 py-3 text-sm font-semibold text-foreground">Unit Cost</th>
+            <th className="text-right px-4 py-3 text-sm font-semibold text-foreground">Unit Price</th>
+            <th className="text-center px-4 py-3 text-sm font-semibold text-foreground">Current Stock</th>
+            <th className="text-center px-4 py-3 text-sm font-semibold text-foreground">Minimum Stock</th>
             <th className="text-center px-4 py-3 text-sm font-semibold text-foreground">Actions</th>
           </tr>
         </thead>
@@ -71,8 +69,12 @@ export function StorageTable({ items, onUpdateQuantity }: StorageTableProps) {
                 )}
               >
                 <td className="px-4 py-3 text-sm font-medium text-foreground">{item.name}</td>
-                <td className="px-4 py-3 text-sm text-muted-foreground">{item.location}</td>
-                <td className="px-4 py-3 text-sm text-muted-foreground">{item.category}</td>
+                <td className="px-4 py-3 text-right text-sm text-muted-foreground">
+                  {item.unitCost ? item.unitCost.toLocaleString() : ''}
+                </td>
+                <td className="px-4 py-3 text-right text-sm text-muted-foreground">
+                  {item.unitPrice ? item.unitPrice.toLocaleString() : ''}
+                </td>
                 <td className="px-4 py-3 text-center">
                   {isEditing ? (
                     <Input
@@ -92,9 +94,6 @@ export function StorageTable({ items, onUpdateQuantity }: StorageTableProps) {
                   )}
                 </td>
                 <td className="px-4 py-3 text-center text-sm text-muted-foreground">{item.minStock}</td>
-                <td className="px-4 py-3 text-center">
-                  <StockStatusBadge status={status} />
-                </td>
                 <td className="px-4 py-3 text-center">
                   {isEditing ? (
                     <div className="flex items-center justify-center gap-1">
