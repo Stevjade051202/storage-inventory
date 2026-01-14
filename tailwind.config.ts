@@ -57,6 +57,23 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        stock: {
+          available: {
+            DEFAULT: "hsl(var(--stock-available))",
+            bg: "hsl(var(--stock-available-bg))",
+            foreground: "hsl(var(--stock-available-foreground))",
+          },
+          empty: {
+            DEFAULT: "hsl(var(--stock-empty))",
+            bg: "hsl(var(--stock-empty-bg))",
+            foreground: "hsl(var(--stock-empty-foreground))",
+          },
+          low: {
+            DEFAULT: "hsl(var(--stock-low))",
+            bg: "hsl(var(--stock-low-bg))",
+            foreground: "hsl(var(--stock-low-foreground))",
+          },
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
