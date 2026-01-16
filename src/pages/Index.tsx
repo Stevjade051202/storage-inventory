@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { StorageItem } from '@/types/storage';
 import { initialStockData } from '@/data/initialStock';
 import { StorageTable } from '@/components/StorageTable';
 import { StockSummary } from '@/components/StockSummary';
-import { Warehouse, Printer, Search, Calendar } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { Warehouse, Printer, Search, Calendar, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -13,6 +15,8 @@ const Index = () => {
     new Date().toISOString().slice(0, 10)
   );
   const [searchTerm, setSearchTerm] = useState('');
+  const { logout, user } = useAuth();
+  const navigate = useNavigate();
 
   const filteredItems = items.filter((item) => {
     const query = searchTerm.toLowerCase().trim();
@@ -23,16 +27,24 @@ const Index = () => {
     );
   });
 
-  const handleUpdateQuantity = (id: string, quantity: number) => {
+  const handleUpdateItem = (
+    id: string,
+    changes: { quantity: number; unitPrice: number; minStock: number }
+  ) => {
     setItems((prev) =>
       prev.map((item) =>
-        item.id === id ? { ...item, quantity, lastUpdated: new Date() } : item
+        item.id === id ? { ...item, ...changes, lastUpdated: new Date() } : item
       )
     );
   };
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
   };
 
   return (
@@ -63,10 +75,21 @@ const Index = () => {
                 className="pl-9"
               />
             </div>
-            <Button onClick={handlePrint} variant="outline">
-              <Printer className="h-4 w-4 mr-2" />
-              Print Inventory
-            </Button>
+            <div className="flex items-center gap-2">
+              {user && (
+                <span className="text-sm text-muted-foreground hidden sm:inline">
+                  {user.username}
+                </span>
+              )}
+              <Button onClick={handlePrint} variant="outline">
+                <Printer className="h-4 w-4 mr-2" />
+                Print Inventory
+              </Button>
+              <Button onClick={handleLogout} variant="outline">
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -88,7 +111,7 @@ const Index = () => {
               />
             </div>
           </div>
-          <StorageTable items={filteredItems} onUpdateQuantity={handleUpdateQuantity} />
+          <StorageTable items={filteredItems} onUpdateItem={handleUpdateItem} />
         </div>
 
         {/* Legend */}
